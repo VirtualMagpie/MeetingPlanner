@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: init-table-salle
+      id: init-table-materiel-mobile
       author: VirtualMagpie
       changes:
         - createTable:
-            tableName: salle
+            tableName: materiel-mobile
             columns:
               # ID
               - column:
@@ -14,15 +14,12 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     nullable: false
-              # Nom d'affichage de la salle
+              # Jointure sur la table des types de matériel
               - column:
-                  name: nom
-                  type: varchar(50)
-                  constraints:
-                    nullable: false
-              # Nombre de places nominal de la salle
-              - column:
-                  name: capacite
+                  name: id_type_materiel
                   type: int
                   constraints:
                     nullable: false
+                    foreignKey:
+                      referencedColumnNames: id
+                      referencedTableName: type_materiel

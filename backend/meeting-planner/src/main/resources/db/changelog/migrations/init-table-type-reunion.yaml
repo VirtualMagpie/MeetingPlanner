@@ -1,10 +1,10 @@
 databaseChangeLog:
   - changeSet:
-      id: init-table-salle
+      id: init-table-type-reunion
       author: VirtualMagpie
       changes:
         - createTable:
-            tableName: salle
+            tableName: type-reunion
             columns:
               # ID
               - column:
@@ -14,15 +14,9 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     nullable: false
-              # Nom d'affichage de la salle
+              # Nom d'affichage du type de réunion
               - column:
                   name: nom
                   type: varchar(50)
-                  constraints:
-                    nullable: false
-              # Nombre de places nominal de la salle
-              - column:
-                  name: capacite
-                  type: int
                   constraints:
                     nullable: false
