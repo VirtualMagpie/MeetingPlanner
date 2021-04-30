@@ -1,0 +1,25 @@
+databaseChangeLog:
+  - changeSet:
+      id: init-table-salle
+      author: VirtualMagpie
+      changes:
+        - createTable:
+            tableName: salle
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: nom
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: capacite
+                  type: int
+                  constraints:
+                    nullable: false
