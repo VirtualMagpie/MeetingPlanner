@@ -4,12 +4,11 @@ import lombok.Builder;
 import lombok.Value;
 
 /**
- * Représentation d'un matériel de réunion
+ * Représentation d'un type de réunion.
  */
 @Builder
 @Value
-public class Materiel {
+public class TypeReunion {
     Integer id;
-    TypeMateriel typeMateriel;
-    Boolean mobile;
+    String nom;
 }

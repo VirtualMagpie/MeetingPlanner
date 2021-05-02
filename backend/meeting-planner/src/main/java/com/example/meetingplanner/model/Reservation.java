@@ -14,8 +14,7 @@ import java.util.Set;
 public class Reservation {
     Integer id;
     String idReservateur;
-    Integer idTypeReunion;
-    String nomTypeReunion;
+    TypeReunion typeReunion;
     Salle salle;
     Set<Materiel> materielsMobiles;
     Instant debut;

@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 
 /**
@@ -33,11 +34,17 @@ public class SalleDb {
 
     /**
      * Capacité nominale de la salle en nombre de places.
+     * <p>
      * Ex: 10
      */
     @Column(name = "capacite", nullable = false)
     private Integer capacite;
 
-    // TODO: utiliser le OneToMany pour directement accéder à la liste des équipements présents ?
-    // TODO: changer description
+    /**
+     * Matériels fixes présents dans cette salle.
+     * <p>
+     * Ex: écran + webcam
+     */
+    @OneToMany(mappedBy = "salle", fetch = FetchType.LAZY)
+    private Set<MaterielFixeDb> materielsFixes;
 }
