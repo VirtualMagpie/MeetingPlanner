@@ -15,11 +15,11 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "materiel-mobile")
+@Table(name = "materiel_mobile")
 public class MaterielMobileDb {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /**

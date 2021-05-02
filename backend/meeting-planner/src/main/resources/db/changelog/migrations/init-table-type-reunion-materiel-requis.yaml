@@ -4,7 +4,7 @@ databaseChangeLog:
       author: VirtualMagpie
       changes:
         - createTable:
-            tableName: type-reunion-materiel-requis
+            tableName: type_reunion_materiel_requis
             columns:
               # Jointure sur la table des types de matériel
               - column:

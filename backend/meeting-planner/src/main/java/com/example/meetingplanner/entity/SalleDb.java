@@ -20,7 +20,7 @@ import javax.persistence.*;
 public class SalleDb {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /**

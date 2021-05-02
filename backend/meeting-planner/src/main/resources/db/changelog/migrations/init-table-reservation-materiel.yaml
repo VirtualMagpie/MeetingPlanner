@@ -4,7 +4,7 @@ databaseChangeLog:
       author: VirtualMagpie
       changes:
         - createTable:
-            tableName: reservation-materiel
+            tableName: reservation_materiel
             columns:
               # Jointure sur la table des matériels mobiles
               - column:

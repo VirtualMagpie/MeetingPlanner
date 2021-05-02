@@ -16,11 +16,11 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "type-materiel")
+@Table(name = "type_materiel")
 public class TypeMaterielDb {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /**

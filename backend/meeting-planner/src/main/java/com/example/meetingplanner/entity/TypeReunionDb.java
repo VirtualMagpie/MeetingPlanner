@@ -16,11 +16,11 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "type-reunion")
+@Table(name = "type_reunion")
 public class TypeReunionDb {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     // TODO: ajouter un code en plus du nom

@@ -4,7 +4,7 @@ databaseChangeLog:
       author: VirtualMagpie
       changes:
         - createTable:
-            tableName: type-materiel
+            tableName: type_materiel
             columns:
               # ID
               - column:

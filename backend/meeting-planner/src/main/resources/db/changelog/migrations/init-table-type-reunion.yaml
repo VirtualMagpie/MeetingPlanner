@@ -4,7 +4,7 @@ databaseChangeLog:
       author: VirtualMagpie
       changes:
         - createTable:
-            tableName: type-reunion
+            tableName: type_reunion
             columns:
               # ID
               - column:

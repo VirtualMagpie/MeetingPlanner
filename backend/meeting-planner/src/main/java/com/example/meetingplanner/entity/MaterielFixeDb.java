@@ -13,11 +13,11 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "materiel-fixe")
+@Table(name = "materiel_fixe")
 public class MaterielFixeDb {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /**
@@ -28,7 +28,7 @@ public class MaterielFixeDb {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_type_materiel", nullable = false)
     private TypeMaterielDb typeMateriel;
-    
+
     /**
      * Salle dans laquel ce matériel est présent
      */
