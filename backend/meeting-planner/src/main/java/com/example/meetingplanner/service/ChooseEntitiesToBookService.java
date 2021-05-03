@@ -131,7 +131,7 @@ public class ChooseEntitiesToBookService {
     // Type matériel mobile requis
     return findIdTypeMaterielMobileRequis(idTypeMaterielRequis, salle).stream()
         .map(
-            // Recupère pour chaque type materiel quelconque de ce type
+            // Recupère pour chaque type de materiel, un materiel mobile quelconque de ce type
             idTypeMateriel ->
                 materiels.stream()
                     .filter(materiel -> idTypeMateriel.equals(materiel.getTypeMateriel().getId()))

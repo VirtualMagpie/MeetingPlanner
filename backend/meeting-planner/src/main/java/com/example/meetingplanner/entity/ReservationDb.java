@@ -72,7 +72,7 @@ public class ReservationDb {
   // ReservationDb is owner of the many-to-many relationship
   @ManyToMany(fetch = FetchType.LAZY)
   @JoinTable(
-      name = "reservation-materiel",
+      name = "reservation_materiel",
       joinColumns = {@JoinColumn(name = "id_reservation")},
       inverseJoinColumns = {@JoinColumn(name = "id_materiel_mobile")})
   private Set<MaterielMobileDb> materielReserve;
