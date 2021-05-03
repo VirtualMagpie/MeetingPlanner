@@ -17,22 +17,23 @@ import java.util.stream.Collectors;
 @Service
 public class TypeReunionDbService {
 
-    private final TypeReunionRepository typeReunionRepository;
+  private final TypeReunionRepository typeReunionRepository;
 
-    public Set<TypeReunion> fetchAll() {
-        return typeReunionRepository
-                .findAll()
-                .stream()
-                .map(TypeReunionConverter::fromDb)
-                .collect(Collectors.toSet());
-    }
+  public Set<TypeReunion> fetchAll() {
+    return typeReunionRepository.findAll().stream()
+        .map(TypeReunionConverter::fromDb)
+        .collect(Collectors.toSet());
+  }
 
-    public Set<TypeMateriel> fetchAllTypeMaterielRequis(Integer idTypeReunion) {
-        return typeReunionRepository
-                .findById(idTypeReunion)
-                .map(TypeReunionDb::getTypeMaterielRequis)
-                .map(typeMaterielDbs ->
-                        typeMaterielDbs.stream().map(TypeMaterielConverter::fromDb).collect(Collectors.toSet()))
-                .orElse(Collections.emptySet());
-    }
+  public Set<TypeMateriel> fetchAllTypeMaterielRequis(Integer idTypeReunion) {
+    return typeReunionRepository
+        .findById(idTypeReunion)
+        .map(TypeReunionDb::getTypeMaterielRequis)
+        .map(
+            typeMaterielDbs ->
+                typeMaterielDbs.stream()
+                    .map(TypeMaterielConverter::fromDb)
+                    .collect(Collectors.toSet()))
+        .orElse(Collections.emptySet());
+  }
 }

@@ -21,10 +21,20 @@ public class MaterielMobileAvailableSpecification implements Specification<Mater
   public Predicate toPredicate(
       Root<MaterielMobileDb> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
 
+    // Hibernate would create a clause "materiel.field not in (null)" when we use "in"
+    // criteria on an empty set. This clause is not working and return no result. To prevent
+    // this, we build an "in" criteria only when set is not null.
+
     Predicate ofRequestedType =
-        root.<TypeMaterielDb>get("typeMateriel").<Integer>get("id").in(idTypesMateriels);
+        idTypesMateriels.size() > 0
+            ? root.<TypeMaterielDb>get("typeMateriel").<Integer>get("id").in(idTypesMateriels)
+            // always false
+            : criteriaBuilder.disjunction();
     Predicate notAlreadyBooked =
-        criteriaBuilder.not(root.<Integer>get("id").in(idMaterielsReserves));
+        idMaterielsReserves.size() > 0
+            ? criteriaBuilder.not(root.<Integer>get("id").in(idMaterielsReserves))
+            // always true
+            : criteriaBuilder.conjunction();
 
     return criteriaBuilder.and(ofRequestedType, notAlreadyBooked);
   }

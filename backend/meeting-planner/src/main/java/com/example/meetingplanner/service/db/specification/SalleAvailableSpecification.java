@@ -26,7 +26,12 @@ public class SalleAvailableSpecification implements Specification<SalleDb> {
     Predicate sufficientSpace =
         criteriaBuilder.greaterThanOrEqualTo(root.<Integer>get("capacite"), nombrePlace);
     Predicate notAlreadyOccupied =
-        criteriaBuilder.not(root.<Integer>get("id").in(idSallesOccupees));
+        idSallesOccupees.size() > 0
+            ? criteriaBuilder.not(root.<Integer>get("id").in(idSallesOccupees))
+            // Hibernate would create a clause "salle.id not in (null)" when we use previous
+            // criteria on an empty set. This clause is not working and return no result. To prevent
+            // this, we use an always true predicate instead when this set is empty.
+            : criteriaBuilder.conjunction();
 
     return criteriaBuilder.and(sufficientSpace, notAlreadyOccupied);
   }

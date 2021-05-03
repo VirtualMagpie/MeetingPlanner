@@ -3,41 +3,50 @@ package com.example.meetingplanner.service;
 import com.example.meetingplanner.model.EntitiesToBook;
 import com.example.meetingplanner.model.Materiel;
 import com.example.meetingplanner.model.Salle;
+import com.example.meetingplanner.model.TypeMateriel;
+import com.example.meetingplanner.service.db.MaterielMobileDbService;
+import com.example.meetingplanner.service.db.SalleDbService;
+import com.example.meetingplanner.service.db.TypeReunionDbService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
- * Service qui, parmi les choix possibles d'entités disponibles à une réservation, choisit le "meilleur" ensemble
- * d'entité qui respecte les contraintes posées.
+ * Service qui, parmi les choix possibles d'entités disponibles à une réservation, choisit le
+ * "meilleur" ensemble d'entité qui respecte les contraintes posées.
  */
 @AllArgsConstructor
 @Service
 public class ChooseEntitiesToBookService {
 
-    private final FindAvailableSalleService findAvailableSalleService;
-    private final FindAvailableMaterielService findAvailableMaterielService;
+  private final TypeReunionDbService typeReunionDbService;
+  private final SalleDbService salleDbService;
+  private final MaterielMobileDbService materielMobileDbService;
 
-    public EntitiesToBook choose(
-            Integer idTypeReunion,
-            Integer nombrePersonne,
-            Instant debut,
-            Instant fin
-    ) {
-        Set<Salle> salles = findAvailableSalleService.find(nombrePersonne, debut, fin);
-        Set<Materiel> materiels = findAvailableMaterielService.find(idTypeReunion, debut, fin);
-        return chooseFromAvailableEntities(idTypeReunion, salles, materiels);
-    }
+  public EntitiesToBook choose(
+      Integer idTypeReunion, Integer nombrePersonne, Instant debut, Instant fin) {
+    Set<Integer> idTypeMaterielRequis =
+        typeReunionDbService.fetchAllTypeMaterielRequis(idTypeReunion).stream()
+            .map(TypeMateriel::getId)
+            .collect(Collectors.toSet());
+    Set<Salle> salles = salleDbService.searchAllAvailable(debut, fin, nombrePersonne);
+    Set<Materiel> materiels =
+        materielMobileDbService.searchAllAvailable(debut, fin, idTypeMaterielRequis);
+    return chooseFromAvailableEntities(idTypeMaterielRequis, salles, materiels);
+  }
 
-    private EntitiesToBook chooseFromAvailableEntities(
-            Integer idTypeReunion, // TODO: récupérer plutôt la liste des matériels requis
-            Set<Salle> salles,
-            Set<Materiel> materiels
+  private EntitiesToBook chooseFromAvailableEntities(
+      Set<Integer> idTypeMaterielRequis, Set<Salle> salles, Set<Materiel> materiels) {
 
-    ) {
-        // TODO: to implement
-        return EntitiesToBook.builder().build();
-    }
+    // TODO: to implement
+    return EntitiesToBook.builder()
+        // TODO: to change
+        .salle(salles.stream().findAny().orElse(null))
+        // TODO: to change
+        .materielsMobiles(materiels)
+        .build();
+  }
 }
