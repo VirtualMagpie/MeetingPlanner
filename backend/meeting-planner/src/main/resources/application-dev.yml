@@ -1,4 +1,6 @@
 spring:
+  datasource:
+    initialization-mode: always # call schema.sql to reset db
   jpa:
     show-sql: true
   liquibase:

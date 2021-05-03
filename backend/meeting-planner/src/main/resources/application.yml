@@ -5,6 +5,6 @@ spring:
     password: meeting_planner
     platform: postgres
     driver-class-name: org.postgresql.Driver
-    initialization-mode: always
+    initialization-mode: never # do not call schema.sql (which reset db)
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
