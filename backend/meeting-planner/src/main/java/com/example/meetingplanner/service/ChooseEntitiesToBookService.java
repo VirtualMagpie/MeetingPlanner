@@ -4,8 +4,6 @@ import com.example.meetingplanner.model.EntitiesToBook;
 import com.example.meetingplanner.model.Materiel;
 import com.example.meetingplanner.model.Salle;
 import com.example.meetingplanner.model.TypeMateriel;
-import com.example.meetingplanner.service.db.MaterielMobileDbService;
-import com.example.meetingplanner.service.db.SalleDbService;
 import com.example.meetingplanner.service.db.TypeReunionDbService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,8 +21,8 @@ import java.util.stream.Collectors;
 public class ChooseEntitiesToBookService {
 
   private final TypeReunionDbService typeReunionDbService;
-  private final SalleDbService salleDbService;
-  private final MaterielMobileDbService materielMobileDbService;
+  private final FindAvailableSalleService findAvailableSalleService;
+  private final FindAvailableMaterielService findAvailableMaterielService;
 
   public EntitiesToBook choose(
       Integer idTypeReunion, Integer nombrePersonne, Instant debut, Instant fin) {
@@ -32,9 +30,8 @@ public class ChooseEntitiesToBookService {
         typeReunionDbService.fetchAllTypeMaterielRequis(idTypeReunion).stream()
             .map(TypeMateriel::getId)
             .collect(Collectors.toSet());
-    Set<Salle> salles = salleDbService.searchAllAvailable(debut, fin, nombrePersonne);
-    Set<Materiel> materiels =
-        materielMobileDbService.searchAllAvailable(debut, fin, idTypeMaterielRequis);
+    Set<Salle> salles = findAvailableSalleService.find(nombrePersonne, debut, fin);
+    Set<Materiel> materiels = findAvailableMaterielService.find(idTypeMaterielRequis, debut, fin);
     return chooseFromAvailableEntities(idTypeMaterielRequis, salles, materiels);
   }
 
