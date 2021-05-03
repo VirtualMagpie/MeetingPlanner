@@ -5,16 +5,20 @@ import com.example.meetingplanner.model.Materiel;
 import com.example.meetingplanner.model.Salle;
 import com.example.meetingplanner.model.TypeMateriel;
 import com.example.meetingplanner.service.db.TypeReunionDbService;
+import com.google.common.collect.Sets;
 import lombok.AllArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Comparator;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  * Service qui, parmi les choix possibles d'entités disponibles à une réservation, choisit le
- * "meilleur" ensemble d'entité qui respecte les contraintes posées.
+ * "meilleur" ensemble d'entités qui respecte les contraintes posées.
  */
 @AllArgsConstructor
 @Service
@@ -24,6 +28,7 @@ public class ChooseEntitiesToBookService {
   private final FindAvailableSalleService findAvailableSalleService;
   private final FindAvailableMaterielService findAvailableMaterielService;
 
+  @Nullable
   public EntitiesToBook choose(
       Integer idTypeReunion, Integer nombrePersonne, Instant debut, Instant fin) {
     Set<Integer> idTypeMaterielRequis =
@@ -35,15 +40,103 @@ public class ChooseEntitiesToBookService {
     return chooseFromAvailableEntities(idTypeMaterielRequis, salles, materiels);
   }
 
+  /**
+   * Recherche du "meilleur" ensemble d'entités à réserver.
+   *
+   * <p>Première version: la valeur d'une solution est uniquement basée sur le nombre de place, ie
+   * on cherche à obtenir la salle la plus petite possible respectant les contraintes posées (on ne
+   * se soucie pas de la quantité de matériel à réserver que cela implique dans cette première
+   * version).
+   *
+   * <p>Retourne null si aucune solution n'est trouvée.
+   */
+  // TODO: faire une nouvelle version avec une fonction de score plus intelligente, qui prenne en
+  //  considération la restriction du matériel. (gérer notamment les égalités sur le nombre de
+  //  places)
+  @Nullable
   private EntitiesToBook chooseFromAvailableEntities(
       Set<Integer> idTypeMaterielRequis, Set<Salle> salles, Set<Materiel> materiels) {
 
-    // TODO: to implement
-    return EntitiesToBook.builder()
-        // TODO: to change
-        .salle(salles.stream().findAny().orElse(null))
-        // TODO: to change
-        .materielsMobiles(materiels)
-        .build();
+    // Types de matériel requis dans la salle, car non disponible parmi le matériel mobile
+    Set<Integer> idTypeMaterielFixeRequis =
+        findIdTypeMaterielFixeRequis(idTypeMaterielRequis, materiels);
+
+    Optional<Salle> bestSalle =
+        salles.stream()
+            // Salles pouvant respecter le type de réunion en fonction du matériel fixe présent et
+            // du matériel mobile disponible
+            .filter(salle -> hasAllRequiredMateriel(salle, idTypeMaterielFixeRequis))
+            // Salle ayant la plus petite capacité
+            .min(Comparator.comparing(Salle::getCapacite));
+
+    return bestSalle
+        .map(
+            salle ->
+                EntitiesToBook.builder()
+                    .salle(salle)
+                    .materielsMobiles(chooseMaterielMobile(salle, idTypeMaterielRequis, materiels))
+                    .build())
+        .orElse(null);
+  }
+
+  /**
+   * Définit la liste du type de matériel fixe nécessaire dans la salle afin de respecter la
+   * matériel requis et suivant les disponibilités du matériel mobile.
+   */
+  private Set<Integer> findIdTypeMaterielFixeRequis(
+      Set<Integer> idTypeMaterielRequis, Set<Materiel> materiels) {
+    // Types de matériel mobile disponibles
+    Set<Integer> idTypeMaterielMobileDisponible =
+        materiels.stream()
+            .map(Materiel::getTypeMateriel)
+            .map(TypeMateriel::getId)
+            .collect(Collectors.toSet());
+    // Types de matériel fixe requis dans la salle, car non disponible parmi le matériel mobile
+    return Sets.difference(idTypeMaterielRequis, idTypeMaterielMobileDisponible);
+  }
+
+  /**
+   * Définit la liste du type de matériel mobile nécessaire afin de respecter le matériel requis et
+   * suivant le matériel déjà présent dans une salle donnée.
+   */
+  private Set<Integer> findIdTypeMaterielMobileRequis(
+      Set<Integer> idTypeMaterielRequis, Salle salle) {
+    // Types de matériel fixe disponibles
+    Set<Integer> idTypeMaterielFixeDisponible =
+        salle.getMateriels().stream()
+            .map(Materiel::getTypeMateriel)
+            .map(TypeMateriel::getId)
+            .collect(Collectors.toSet());
+    // Types de matériel mobile requis, car non disponible parmi le matériel fixe présent dans la
+    // salle
+    return Sets.difference(idTypeMaterielRequis, idTypeMaterielFixeDisponible);
+  }
+
+  /** Vérifie si la salle dispose du matériel fixe requis */
+  private boolean hasAllRequiredMateriel(Salle salle, Set<Integer> idTypeMaterielFixeRequis) {
+    return salle.getMateriels().stream()
+        .map(Materiel::getTypeMateriel)
+        .map(TypeMateriel::getId)
+        .collect(Collectors.toSet())
+        .containsAll(idTypeMaterielFixeRequis);
+  }
+
+  /**
+   * Etant donné une salle choisie et du matériel requis, choisit une liste de matériel mobile à
+   * réserver pour compléter les types manquant.
+   */
+  private Set<Materiel> chooseMaterielMobile(
+      Salle salle, Set<Integer> idTypeMaterielRequis, Set<Materiel> materiels) {
+
+    // Type matériel mobile requis
+    return findIdTypeMaterielMobileRequis(idTypeMaterielRequis, salle).stream()
+        .map(
+            // Recupère pour chaque type materiel quelconque de ce type
+            idTypeMateriel ->
+                materiels.stream()
+                    .filter(materiel -> idTypeMateriel.equals(materiel.getTypeMateriel().getId()))
+                    .findAny()
+                    .orElseThrow())
+        .collect(Collectors.toSet());
   }
 }
