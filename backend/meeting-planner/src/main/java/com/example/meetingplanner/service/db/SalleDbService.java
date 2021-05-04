@@ -10,6 +10,7 @@ import com.example.meetingplanner.service.db.specification.SalleAvailableSpecifi
 import com.example.meetingplanner.utils.converter.SalleConverter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Set;
@@ -22,6 +23,7 @@ public class SalleDbService {
   private final SalleRepository salleRepository;
   private final ReservationRepository reservationRepository;
 
+  @Transactional
   public Set<Salle> searchAllAvailable(Instant debut, Instant fin, Integer nombrePersonne) {
     // Liste des salles non disponibles
     Set<Integer> idSallesOccupees =

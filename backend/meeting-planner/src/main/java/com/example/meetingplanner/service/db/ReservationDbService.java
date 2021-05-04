@@ -13,6 +13,7 @@ import com.example.meetingplanner.repository.TypeReunionRepository;
 import com.example.meetingplanner.utils.converter.ReservationConverter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.Set;
@@ -37,6 +38,7 @@ public class ReservationDbService {
    * Save a new reservation in db. Is not supposed to save or edit other joined entites (salle,
    * materiel, etc...)
    */
+  @Transactional
   public Reservation save(Reservation reservation) {
 
     // Salle must already exist

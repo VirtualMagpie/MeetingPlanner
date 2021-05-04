@@ -10,6 +10,7 @@ import com.example.meetingplanner.service.db.specification.ReservationOverlappin
 import com.example.meetingplanner.utils.converter.MaterielConverter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.Collection;
@@ -23,6 +24,7 @@ public class MaterielMobileDbService {
   private final MaterielMobileRepository materielMobileRepository;
   private final ReservationRepository reservationRepository;
 
+  @Transactional
   public Set<Materiel> searchAllAvailable(Instant debut, Instant fin, Set<Integer> idTypeMateriel) {
     // Liste du materiel mobile non disponibles
     Set<Integer> idMaterielsReserves =
