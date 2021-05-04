@@ -28,7 +28,7 @@ public class TypeReunionDbServiceTest {
 
   /** Unit test for method {@link TypeReunionDbService#fetchAll} */
   @Nested
-  public class FetchAll {
+  class FetchAll {
 
     @Test
     void whenNoResult() {
@@ -62,7 +62,7 @@ public class TypeReunionDbServiceTest {
 
   /** Unit test for method {@link TypeReunionDbService#fetchAllTypeMaterielRequis} */
   @Nested
-  public class FetchAllTypeMaterielRequis {
+  class FetchAllTypeMaterielRequis {
 
     private final Integer ID = 1;
 
