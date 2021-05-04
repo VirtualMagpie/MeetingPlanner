@@ -2,9 +2,5 @@ package com.example.meetingplanner.repository;
 
 import com.example.meetingplanner.entity.TypeReunionDb;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-// TODO: check if this annotation is required
-@Repository
-public interface TypeReunionRepository extends JpaRepository<TypeReunionDb, Integer> {
-}
+public interface TypeReunionRepository extends JpaRepository<TypeReunionDb, Integer> {}
