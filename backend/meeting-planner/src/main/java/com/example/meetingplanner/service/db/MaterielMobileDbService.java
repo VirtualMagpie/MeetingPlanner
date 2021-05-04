@@ -34,7 +34,7 @@ public class MaterielMobileDbService {
             .map(MaterielMobileDb::getId)
             .collect(Collectors.toSet());
 
-    // Salles disponibles et respectant les contraintes
+    // Matériels disponibles et respectant les contraintes
     return materielMobileRepository
         .findAll(new MaterielMobileAvailableSpecification(idTypeMateriel, idMaterielsReserves))
         .stream()
