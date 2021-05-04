@@ -24,7 +24,7 @@ public class AddReservationService {
       Instant fin) {
 
     // TODO: penser à vérifier que les entités n'ont pas été réservées entre temps (et à ouvrir une
-    //  transaction pour être sûr qu'elle ne le sont pas également pendant cette sauvegarde)
+    //  transaction pour être sûr qu'elles ne le sont pas également pendant cette sauvegarde)
 
     return reservationDbService.save(
         Reservation.builder()
