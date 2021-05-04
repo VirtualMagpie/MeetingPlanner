@@ -1,5 +1,10 @@
 spring:
   datasource:
+    url: jdbc:postgresql://localhost:5432/meeting-planner
+    username: meeting_planner
+    password: meeting_planner
+    platform: postgres
+    driver-class-name: org.postgresql.Driver
     initialization-mode: always # call schema.sql to reset db
   jpa:
     show-sql: true

@@ -7,6 +7,7 @@ Gestionnaire des salles de réunion d'une PME (test technique pour entretien Can
 - Java 11
 - Spring Boot 2.4.5
 - PostgreSQL 11.4
+- Docker (requis pour les tests d'intégration du backend -> requiert l'image postgres:11.4)
 
 ### Creation base de donnees PostgreSQL
 

@@ -1,10 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/meeting-planner
-    username: meeting_planner
-    password: meeting_planner
-    platform: postgres
-    driver-class-name: org.postgresql.Driver
-    initialization-mode: never # do not call schema.sql (which reset db)
+    initialization-mode: never # do not call schema.sql (which would reset db)
+  jpa:
+    hibernate:
+      ddl-auto: none # Do not let hibernate automatically create or update DB schema
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
