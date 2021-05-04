@@ -8,6 +8,7 @@ import com.example.meetingplanner.utils.converter.TypeMaterielConverter;
 import com.example.meetingplanner.utils.converter.TypeReunionConverter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.Set;
@@ -19,12 +20,14 @@ public class TypeReunionDbService {
 
   private final TypeReunionRepository typeReunionRepository;
 
+  @Transactional
   public Set<TypeReunion> fetchAll() {
     return typeReunionRepository.findAll().stream()
         .map(TypeReunionConverter::fromDb)
         .collect(Collectors.toSet());
   }
 
+  @Transactional
   public Set<TypeMateriel> fetchAllTypeMaterielRequis(Integer idTypeReunion) {
     return typeReunionRepository
         .findById(idTypeReunion)
