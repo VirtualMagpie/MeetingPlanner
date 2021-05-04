@@ -53,8 +53,6 @@ public class ReservationDb {
 
   // TODO: stocker nombre de personnes pour la réunion ?
 
-  // TODO: check instant conversion with postgresql
-
   /** Début de la réunion. */
   @Column(name = "datetime_debut", nullable = false)
   private Instant datetimeDebut;

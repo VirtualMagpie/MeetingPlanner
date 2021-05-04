@@ -46,15 +46,4 @@ public class SalleDb {
    */
   @OneToMany(mappedBy = "salle", fetch = FetchType.LAZY)
   private Set<MaterielFixeDb> materielsFixes;
-
-  // TODO: la table des réservations est amenée a beaucoup grossir (contrairement au autres),
-  //  si bien que ce Set finira par devenir lourd à charger en mémoire et traiter.
-  //  -> à corriger (faire une requête explicite pour charger uniquement les réservations utiles ?)
-  /**
-   * Réservations faites sur cette salle.
-   *
-   * <p>Ex: écran + webcam
-   */
-  @OneToMany(mappedBy = "salle", fetch = FetchType.LAZY)
-  private Set<ReservationDb> reservations;
 }

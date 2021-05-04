@@ -1,7 +1,6 @@
 package com.example.meetingplanner.utils.converter;
 
 import com.example.meetingplanner.entity.MaterielFixeDb;
-import com.example.meetingplanner.entity.ReservationDb;
 import com.example.meetingplanner.entity.SalleDb;
 import com.example.meetingplanner.entity.TypeMaterielDb;
 import com.example.meetingplanner.model.Materiel;
@@ -28,15 +27,11 @@ public class SalleConverterTest {
     materielFixeDb.setId(2);
     materielFixeDb.setTypeMateriel(typeMaterielDb);
 
-    ReservationDb reservationDb = new ReservationDb();
-    reservationDb.setId(3);
-
     SalleDb salleDb = new SalleDb();
     salleDb.setId(4);
     salleDb.setNom("nom salle");
     salleDb.setCapacite(100);
     salleDb.setMaterielsFixes(Set.of(materielFixeDb));
-    salleDb.setReservations(Set.of(reservationDb));
 
     // [WHEN] converting
 
