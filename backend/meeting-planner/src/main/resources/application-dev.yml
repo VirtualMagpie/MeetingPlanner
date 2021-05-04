@@ -10,3 +10,8 @@ spring:
     show-sql: true
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master-dev.yaml
+
+meetingplanner:
+  restrictions:
+    minuteLibreAvant: 60
+    ratioCapacite: 0.7

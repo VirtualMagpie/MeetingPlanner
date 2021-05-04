@@ -1,7 +1,9 @@
 package com.example.meetingplanner.service;
 
+import com.example.meetingplanner.RestrictionsCovidProperties;
 import com.example.meetingplanner.model.Salle;
 import com.example.meetingplanner.service.db.SalleDbService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,8 +23,15 @@ import static org.mockito.Mockito.lenient;
 @ExtendWith(MockitoExtension.class)
 public class FindAvailableSalleServiceTest {
 
+  @Mock private RestrictionsCovidProperties restrictionsCovidProperties;
   @Mock private SalleDbService salleDbService;
   @InjectMocks private FindAvailableSalleService service;
+
+  @BeforeEach
+  void mockConfig() {
+    lenient().doReturn(60).when(restrictionsCovidProperties).getMinuteLibreAvant();
+    lenient().doReturn(0.7f).when(restrictionsCovidProperties).getRatioCapacite();
+  }
 
   /** Unit test for method {@link FindAvailableSalleService#find} */
   @Nested

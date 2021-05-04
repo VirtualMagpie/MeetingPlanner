@@ -1,5 +1,6 @@
 package com.example.meetingplanner.service;
 
+import com.example.meetingplanner.RestrictionsCovidProperties;
 import com.example.meetingplanner.model.Salle;
 import com.example.meetingplanner.service.db.SalleDbService;
 import lombok.AllArgsConstructor;
@@ -17,15 +18,16 @@ import java.util.Set;
 @Service
 public class FindAvailableSalleService {
 
+  private final RestrictionsCovidProperties restrictionsCovidProperties;
   private final SalleDbService salleDbService;
 
   public Set<Salle> find(Integer nombrePersonne, Instant debut, Instant fin) {
-    // TODO: mettre durée et ratio en config
+    assert restrictionsCovidProperties.getRatioCapacite() > 0;
     return salleDbService.searchAllAvailable(
-        // La doit être disponible 1h avant la réunion (pour désinfection)
-        debut.minus(1, ChronoUnit.HOURS),
+        // La salle doit être disponible 1h avant la réunion (pour désinfection)
+        debut.minus(restrictionsCovidProperties.getMinuteLibreAvant(), ChronoUnit.MINUTES),
         fin,
         // La salle ne peut être occupée qu'à 70%
-        (int) Math.ceil(nombrePersonne / 0.7));
+        (int) Math.ceil(nombrePersonne / restrictionsCovidProperties.getRatioCapacite()));
   }
 }
