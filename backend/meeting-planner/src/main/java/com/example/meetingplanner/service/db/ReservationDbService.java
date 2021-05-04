@@ -58,7 +58,6 @@ public class ReservationDbService {
 
     // Saving entity
     ReservationDb reservationDb = new ReservationDb();
-    reservationDb.setId(reservation.getId()); // TODO: maybe allow only creation, not edition?
     reservationDb.setIdReservateur(reservation.getIdReservateur());
     reservationDb.setSalle(salleDb);
     reservationDb.setTypeReunion(typeReunionDb);
